@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KAV STUDIO – Photo & Podcast Booking</title>
+<style>
+:root{--bg:#f3faf4;--mint:#d8f1df;--ink:#173323;--mut:#547060;--card:#fff;--line:#cde5d3;--blue:#2f7d4c;--onair:#d6342c;--ok:#1f7a4d;--onblue:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a14;--mint:#1f3a2a;--ink:#e6f3ea;--mut:#9bb5a5;--card:#16251c;--line:#2a4034;--blue:#7fd1a0;--onblue:#0b1a11;--onair:#ff5a50;--ok:#4cc38a}}
+:root[data-theme="dark"]{--bg:#0f1a14;--mint:#1f3a2a;--ink:#e6f3ea;--mut:#9bb5a5;--card:#16251c;--line:#2a4034;--blue:#7fd1a0;--onblue:#0b1a11;--onair:#ff5a50;--ok:#4cc38a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--mint) 0,var(--bg) 520px) no-repeat var(--bg);color:var(--ink);font:16px/1.55 "Segoe UI",system-ui,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:700;line-height:1.1;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-family:Georgia,serif;font-weight:700;font-size:22px;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--onair);box-shadow:0 0 0 4px color-mix(in srgb,var(--onair) 25%,transparent);animation:pulse 2s ease-in-out 3}
+@keyframes pulse{50%{box-shadow:0 0 0 9px color-mix(in srgb,var(--onair) 0%,transparent)}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+nav a{color:var(--ink);text-decoration:none;font-weight:600}
+.hero{padding:48px 0 40px;display:grid;gap:28px;grid-template-columns:1.2fr 1fr;align-items:end}
+.hero h1{font-size:clamp(38px,6vw,68px)}
+.hero p{color:var(--mut);max-width:46ch;font-size:18px}
+.btn{display:inline-block;background:var(--blue);color:var(--onblue);border:0;border-radius:8px;padding:13px 22px;font:600 16px inherit;font-family:inherit;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.split{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--blue);border-radius:14px;overflow:hidden;min-height:210px}
+.split div{padding:22px;display:flex;flex-direction:column;justify-content:flex-end}
+.split .a{background:var(--card)}.split .b{background:var(--mint);color:var(--ink)}
+.split b{font-family:Georgia,serif;font-size:24px}.split span{font-size:14px;opacity:.75}
+section{padding:36px 0}
+section>h2{font-size:32px;margin-bottom:6px}
+.sub{color:var(--mut);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.svc h3{font-size:21px;margin-bottom:6px}.svc p{margin:0 0 12px;color:var(--mut);font-size:15px}
+.price{font-weight:700}.price small{display:block;font-weight:400;color:var(--mut)}
+.book{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 5px}
+input,select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.slots{display:flex;flex-wrap:wrap;gap:8px}
+.slot{padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.slot[aria-pressed="true"]{background:var(--blue);color:var(--onblue);border-color:var(--blue)}
+.slot:disabled{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+.times{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.err{color:var(--onair);font-size:14px;min-height:20px;margin:10px 0 0}
+.sum{border-top:1px dashed var(--line);margin-top:16px;padding-top:12px;font-size:15px}
+.sum div{display:flex;justify-content:space-between;padding:2px 0}
+.bank{background:var(--bg);border:1.5px dashed var(--ink);border-radius:10px;padding:14px;margin:14px 0}
+.bank div{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:15px}
+.ref{font:700 22px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.04em}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.steps li{counter-increment:s;padding-left:38px;position:relative}
+.steps li:before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);text-align:center;font-weight:700;font-size:14px;line-height:26px}
+.mail{white-space:pre-wrap;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto}
+.badge{display:inline-block;background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok);font-weight:700;font-size:13px;padding:3px 10px;border-radius:99px}
+footer{padding:28px 0 40px;color:var(--mut);font-size:14px;border-top:1px solid var(--line);margin-top:20px}
+[hidden]{display:none!important}
+@media (max-width:760px){.hero,.book{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><div class="logo"><span class="dot"></span>KAV STUDIO</div><a href="#book">Book a session</a></nav>
+
+<header class="hero">
+  <div>
+    <h1>Shoot it. Record it. Book it today.</h1>
+    <p style="margin:16px 0 22px">A daylight photo studio and a soundproofed podcast room under one roof. Pick a slot, pay the deposit by bank transfer, and we confirm by email.</p>
+    <a class="btn" href="#book">Check availability</a> <a class="btn ghost" href="#how">How booking works</a>
+  </div>
+  <div class="split" aria-hidden="true">
+    <div class="a"><b>Photo</b><span>Cyclorama wall, lights, props</span></div>
+    <div class="b"><b>Podcast</b><span>2–4 mics, video optional</span></div>
+  </div>
+</header>
+
+<section id="services">
+  <h2>Studios & rates</h2>
+  <p class="sub">Charged per hour. Edit rates in the SERVICES list in the script.</p>
+  <div class="grid" id="svcGrid"></div>
+</section>
+
+<section id="book">
+  <h2>Book a session</h2>
+  <p class="sub">Your slot is held for 24 hours while we wait for your deposit.</p>
+  <div class="book">
+    <div class="panel" id="formPanel">
+      <form id="f" novalidate onsubmit="return false">
+        <label for="svc">Studio</label><select id="svc"></select>
+        <label for="date">Date</label><input type="date" id="date">
+        <div class="times"><div><label for="start">Start time</label><select id="start"></select></div><div><label for="end">End time</label><select id="end"></select></div></div>
+        <label for="name">Full name</label><input id="name" autocomplete="name">
+        <label for="email">Email (confirmation is sent here)</label><input id="email" type="email" autocomplete="email">
+        <label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel">
+        <div class="sum" id="sum"></div>
+        <p class="err" id="err" role="alert"></p>
+        <button class="btn" id="go" type="button">Reserve slot and get bank details</button>
+      </form>
+    </div>
+
+    <div class="panel" id="payPanel" hidden>
+      <span class="badge" style="background:color-mix(in srgb,var(--onair) 15%,transparent);color:var(--onair)">Awaiting deposit</span>
+      <h3 style="margin:10px 0 4px;font-size:24px">Transfer your deposit</h3>
+      <p class="sub" style="margin-bottom:0" id="payLine"></p>
+      <div class="bank">
+        <div><span>Bank</span><b id="bBank"></b></div>
+        <div><span>Account name</span><b id="bName"></b></div>
+        <div><span>Account number</span><b id="bNum"></b></div>
+        <div><span>Amount</span><b id="bAmt"></b></div>
+        <div><span>Narration</span><b class="ref" id="bRef"></b></div>
+      </div>
+      <p style="font-size:14px;color:var(--mut);margin:0 0 14px">Use the booking code as the narration so we can match your payment. Then send proof of payment.</p>
+      <button class="btn" id="copy" type="button">Copy booking code</button>
+      <a class="btn ghost" id="proof" href="#">Email proof of payment</a>
+      <p class="sub" style="margin:14px 0 0;font-size:14px" id="copied" aria-live="polite"></p>
+    </div>
+
+    <aside class="panel" id="howPanel">
+      <h3 id="how" style="font-size:22px;margin-bottom:14px">How booking works</h3>
+      <ol class="steps">
+        <li><b>Choose a studio, date, start and end time.</b> Your total and deposit are calculated for you.</li>
+        <li><b>Transfer the deposit.</b> Bank transfer only, with your booking code as narration.</li>
+        <li><b>We verify the payment.</b> Usually within a few working hours.</li>
+        <li><b>You get a confirmation email.</b> Your slot is only confirmed once it arrives.</li>
+      </ol>
+    </aside>
+  </div>
+</section>
+
+<section>
+  <h2>The confirmation email</h2>
+  <p class="sub">Sent automatically when you mark a booking as Paid in your Google Sheet.</p>
+  <div class="mail" id="mail"></div>
+</section>
+
+<footer>KAV STUDIO · Placeholder address · hello@yourstudio.com · Deposits are non-refundable within 48 hours of the session.</footer>
+</div>
+
+<script>
+// ===== EDIT THESE =====
+var CUR = "₦";
+var BANK = {bank:"Your Bank Name", name:"KAV STUDIO", num:"0123456789", email:"hello@yourstudio.com"};
+var SERVICES = [
+  {id:"photo", name:"Photo studio", desc:"Cyclorama wall, strobes, backdrops, changing room.", rate:25000, min:1, dep:50},
+  {id:"pod", name:"Podcast room", desc:"Soundproofed, 2–4 mics, mixing desk, optional video.", rate:30000, min:2, dep:50},
+  {id:"combo", name:"Photo + podcast", desc:"Both rooms together for a content day.", rate:50000, min:2, dep:50}
+]; // rate = price per hour, min = minimum hours, dep = deposit percent
+var OPEN = 8, CLOSE = 20; // opening hours (24h clock)
+var API_URL = ""; // https://script.google.com/macros/s/AKfycby0f4CWsGTkxK4MJWglQIEfH4vvF4i4KHInD8q4YfvD8GSy_2oRw5ZhF9iNYUnuz6TAPg/exec// ======================
+var $ = function(i){return document.getElementById(i)};
+var fmt = function(n){return CUR + n.toLocaleString("en-US")};
+var hh = function(h){return String(h).padStart(2,"0")+":00"};
+var plural = function(n){return n+" hour"+(n===1?"":"s")};
+function svc(){return SERVICES.filter(function(s){return s.id===$("svc").value})[0]}
+
+$("svcGrid").innerHTML = SERVICES.map(function(s){return '<div class="svc"><h3>'+s.name+'</h3><p>'+s.desc+'</p><div class="price">'+fmt(s.rate)+' / hour<small>'+s.dep+'% deposit · minimum '+plural(s.min)+'</small></div></div>'}).join("");
+$("svc").innerHTML = SERVICES.map(function(s){return '<option value="'+s.id+'">'+s.name+'</option>'}).join("");
+
+var d = new Date(); d.setDate(d.getDate()+1);
+var iso = function(x){return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")};
+$("date").min = iso(d); $("date").value = iso(d);
+
+var BOOKED = null; // hours already taken, loaded from your Google Sheet
+function taken(date,h){
+  if (BOOKED) return BOOKED.indexOf(h) > -1;
+  // demo mode only (no API_URL): fake taken hours
+  var k = date+h, n = 0; for (var i=0;i<k.length;i++) n += k.charCodeAt(i);
+  return n % 5 === 0;
+}
+function drawStart(){
+  var date = $("date").value, o = "";
+  for (var h=OPEN; h<CLOSE; h++){ var t = taken(date,h); o += '<option value="'+h+'"'+(t?' disabled':'')+'>'+hh(h)+(t?' (booked)':'')+'</option>'; }
+  $("start").innerHTML = o;
+  var free = [].filter.call($("start").options,function(x){return !x.disabled})[0];
+  if (free) $("start").value = free.value;
+  drawEnd();
+}
+function drawEnd(){
+  var date = $("date").value, st = +$("start").value, s = svc(), o = "", lim = CLOSE;
+  if (isNaN(st) || $("start").options.length === 0 || $("start").selectedOptions[0].disabled){ $("end").innerHTML = ""; return drawSum(); }
+  for (var h=st; h<CLOSE; h++){ if (taken(date,h)){ lim = h; break; } }
+  for (var e=st+1; e<=lim; e++) o += '<option value="'+e+'">'+hh(e)+'</option>';
+  $("end").innerHTML = o;
+  $("end").value = Math.min(st+s.min, lim);
+  drawSum();
+}
+function calc(){
+  var s = svc(), st = +$("start").value, en = +$("end").value;
+  var hrs = (isNaN(st) || isNaN(en) || !$("end").value) ? 0 : en - st;
+  var tot = hrs * s.rate, dep = Math.round(tot * s.dep / 100);
+  return {s:s, st:st, en:en, hrs:hrs, tot:tot, dep:dep, bal:tot-dep};
+}
+function drawSum(){
+  var c = calc();
+  $("sum").innerHTML = c.hrs
+    ? '<div><span>'+plural(c.hrs)+' × '+fmt(c.s.rate)+'</span><span>'+fmt(c.tot)+'</span></div><div><b>Deposit due now ('+c.s.dep+'%)</b><b>'+fmt(c.dep)+'</b></div><div><span>Balance on the day</span><span>'+fmt(c.bal)+'</span></div>'
+    : '<div>No free time on this date. Pick another date.</div>';
+}
+function load(){
+  if (!API_URL){ BOOKED = null; return drawStart(); }
+  $("sum").innerHTML = "<div>Checking availability…</div>";
+  fetch(API_URL+"?date="+$("date").value+"&service="+$("svc").value)
+    .then(function(r){return r.json()})
+    .then(function(j){ BOOKED = j.hours || []; $("err").textContent=""; drawStart(); })
+    .catch(function(){ BOOKED = []; drawStart(); $("err").textContent = "Could not load availability. Please refresh and try again."; });
+}
+$("svc").onchange = load; $("date").onchange = load; $("start").onchange = drawEnd; $("end").onchange = drawSum;
+
+function code(){var c="KAV-"; var a="ABCDEFGHJKMNPQRSTUVWXYZ23456789"; for(var i=0;i<5;i++) c+=a[Math.floor(Math.random()*a.length)]; return c}
+
+$("go").onclick = function(){
+  var c = calc(), s = c.s, n=$("name").value.trim(), em=$("email").value.trim(), ph=$("phone").value.trim();
+  var msg = !c.hrs ? "Choose a start and end time." : c.hrs < s.min ? "The minimum booking for "+s.name+" is "+plural(s.min)+". Choose a later end time or another date." : !n ? "Enter your full name." : !/^\S+@\S+\.\S+$/.test(em) ? "Enter a valid email so we can confirm your booking." : ph.length<7 ? "Enter a phone number we can reach you on." : "";
+  $("err").textContent = msg; if(msg) return;
+  var when = $("date").value+", "+hh(c.st)+" to "+hh(c.en);
+  var show = function(ref){
+  $("bBank").textContent=BANK.bank; $("bName").textContent=BANK.name; $("bNum").textContent=BANK.num; $("bAmt").textContent=fmt(c.dep); $("bRef").textContent=ref;
+  $("payLine").textContent = s.name+" · "+when+" · "+plural(c.hrs)+" · total "+fmt(c.tot)+". Slot held for 24 hours.";
+  $("proof").href = "mailto:"+BANK.email+"?subject="+encodeURIComponent("Payment proof "+ref)+"&body="+encodeURIComponent("Hi, I have paid "+fmt(c.dep)+" for "+s.name+" on "+when+".\nBooking code: "+ref+"\nName: "+n);
+  $("mail").textContent = "To: "+em+"\nSubject: Booking confirmed – "+ref+"\n\nHi "+n+",\n\nWe have received your deposit of "+fmt(c.dep)+". Your session is confirmed.\n\nStudio: "+s.name+"\nWhen: "+when+"\nDuration: "+plural(c.hrs)+"\nTotal: "+fmt(c.tot)+"\nBooking code: "+ref+"\nBalance due on the day: "+fmt(c.bal)+"\n\nPlease arrive 10 minutes early. To reschedule, reply to this email at least 48 hours before your session.\n\nKAV STUDIO";
+  $("formPanel").hidden = true; $("payPanel").hidden = false; $("payPanel").scrollIntoView({block:"start"});
+  };
+  if (!API_URL) return show(code());
+  $("go").disabled = true; $("go").textContent = "Reserving…";
+  fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({service:s.id,date:$("date").value,start:c.st,end:c.en,name:n,email:em,phone:ph})})
+    .then(function(r){return r.json()})
+    .then(function(j){ if (j.ok) return show(j.code); $("err").textContent = j.error || "Could not save your booking."; load(); })
+    .catch(function(){ $("err").textContent = "Network problem. Please check your connection and try again."; })
+    .then(function(){ $("go").disabled = false; $("go").textContent = "Reserve slot and get bank details"; });
+};
+$("copy").onclick = function(){
+  var t = $("bRef").textContent;
+  try { navigator.clipboard.writeText(t).then(function(){$("copied").textContent="Copied "+t+"."}, function(){$("copied").textContent="Copy failed. Select the code and copy it manually."}) }
+  catch(e){ $("copied").textContent="Copy failed. Select the code and copy it manually." }
+};
+$("mail").textContent = "Complete a booking above to preview your confirmation email.";
+load();
+</script>
+</body>
+</html>
